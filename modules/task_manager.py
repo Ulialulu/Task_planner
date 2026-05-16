@@ -2,81 +2,76 @@
 # Автор: mamamarria
 # Задачи: отметка выполненной, удаление, фильтрация, 
 from datetime import datetime
-# ЗАДАЧА 2. ОТМЕТКА ЗАДАЧИ ВЫПОЛНЕННОЙ
-
-def complete_task(task, task_index):
-    """Отмечает задачу выполненной по индексу"""
-    if 0 <= task_index < len(tasks):
-        tasks[task_index]['status'] = 'выполнена'
-        tasks[task_index]['completed_at'] = str(datetime.now())
-        print(f'Выполнено: {tasks[task_index]['title']}')
-    else:
-        print('Несуществующий индекс')
+#  ЗАДАЧА 2: ОТМЕТКА ЗАДАЧИ ВЫПОЛНЕННОЙ 
+def complete_task(tasks, task_id):
+    
+    for i, task in enumerate(tasks):
+        if task['id'] == task_id:
+            tasks[i]['status'] = 'выполнена'
+            tasks[i]['completed_at'] = str(datetime.now())
+            save_tasks(tasks)
+            print(f" Выполнено: {task['title']}")
+            return tasks
+    print(f'Задача с ID {task_id} не найдена')
     return tasks
 
-#ЗАДАЧА 3: УДАЛИТЬ задачу
 
-def delete_task(tasks, task_index):
-    """Удаляет задачу по индексу"""
-    if 0 <= task_index < len(tasks):
-        deleted = tasks.pop(task_index)
-        print(f'Удалено: {deleted['title']}')
-    else:
-        print('Несуществующий индекс')    
+#  ЗАДАЧА 3: УДАЛИТЬ ЗАДАЧУ 
+
+def delete_task(tasks, task_id):
+    
+    for i, task in enumerate(tasks):
+        if task['id'] == task_id:
+            deleted = tasks.pop(i)
+            save_tasks(tasks)
+            print(f" Удалено: {deleted['title']}")
+            return tasks
+    print(f" Задача с ID {task_id} не найдена")
     return tasks
 
-#ЗАДАЧА 4: ФИЛЬТРАЦИЯ        
+
+#  ЗАДАЧА 4: ФИЛЬТРАЦИЯ 
 
 def filter_by_status(tasks, status):
-    """Фильтрует по статусу ("выполнена" или "не выполнена")"""
-    return [t for t in tasks if t['status']==status]
+        return [t for t in tasks if t['status'] == status]
+
+
 def filter_by_priority(tasks, priority):
-    """Фильтрует по приоритету ('high', 'medium', 'low')"""
-    return [t for t in tasks if t['priority']==priority]
+        return [t for t in tasks if t['priority'] == priority]
 
 
 def show_tasks(tasks, title="СПИСОК ЗАДАЧ"):
-    """Красиво показывает список задач"""
     if not tasks:
         print(f'{title}: пусто')
         return
     
-    print(f'{title}:')
-    for i, task in enumerate(tasks):
-        
-        print(f"{i+1}. {task['title']} | до: {task['deadline']}")
+    print(f'\n{title}:')
+
+    for task in tasks:
+        print(f"ID: {task['id']} | {task['title']} | до: {task['deadline']} | {task['priority']} | {task['status']}")
 
 
-# ========== ТЕСТИРОВАНИЕ (запускается только при прямом запуске файла) ==========
+# ТЕСТИРОВАНИЕ
 if __name__ == "__main__":
-    # Тестовые задачи
-    tasks = [
-        {"title": "Сдать проект", "status": "не выполнена", "priority": "high", "deadline": "2026-05-20"},
-        {"title": "Купить продукты", "status": "не выполнена", "priority": "medium", "deadline": "2026-05-15"},
-        {"title": "Позвонить маме", "status": "выполнена", "priority": "low", "deadline": "2026-05-10"},
-    ]
+    print("=== ТЕСТИРОВАНИЕ МОДУЛЯ ===\n")
     
-    print("=== ПРОВЕРКА РАБОТЫ ===\n")
+    tasks = load_tasks()
     
-    # Показываем все задачи
-    show_tasks(tasks, "ВСЕ ЗАДАЧИ")
-    
-    # Отмечаем задачу выполненной
-    print("\n--- Отмечаем задачу 3 как выполненную ---")
-    complete_task(tasks, 2)
-    
-    # Фильтруем
-    print("\n--- Только выполненные ---")
-    done = filter_by_status(tasks, "выполнена")
-    show_tasks(done, "ВЫПОЛНЕННЫЕ")
-    
-    print("\n--- Только высокий приоритет ---")
-    high = filter_by_priority(tasks, "high")
-    show_tasks(high, "HIGH PRIORITY")
-    
-    # Удаляем задачу
-    print("\n--- Удаляем задачу 3 ---")
-    delete_task(tasks, 2)
-    
-    # Что осталось
-    show_tasks(tasks, "ОСТАВШИЕСЯ")
+    if not tasks:
+        print("Нет сохранённых задач. Сначала добавьте задачи через add_task()")
+        print("\nПример добавления задачи:")
+        #add_task()  # раскомментируй для теста
+    else:
+        show_tasks(tasks, "СПИСОК ЗАДАЧ")
+        
+        # Примеры работы 
+        print("\n--- Отмечаем задачу 1 как выполненную ---")
+        complete_task(tasks, 1)
+        
+        print("\n--- Только выполненные ---")
+        done = filter_by_status(tasks, "выполнена")
+        show_tasks(done, "ВЫПОЛНЕННЫЕ")
+        
+        print("\n--- Только высокий приоритет ---")
+        high = filter_by_priority(tasks, "высокий")
+        show_tasks(high, "ВЫСОКИЙ ПРИОРИТЕТ")
