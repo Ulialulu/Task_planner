@@ -1,0 +1,88 @@
+import json
+from datetime import datetime
+
+TASKS_FILE = "tasks.json"
+
+def load_tasks():
+    #Загружает задачи из файла
+    try:
+        with open(TASKS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def save_tasks(tasks):
+    #Сохраняет задачи в файл
+    with open(TASKS_FILE, "w", encoding="utf-8") as f:
+        json.dump(tasks, f, ensure_ascii=False, indent=4)
+
+def add_one_task():
+    print("\n--- Новая задача ---")
+    
+    title = input("Название задачи: ")
+    description = input("Описание: ")
+    
+    #Цикл для даты
+    while True:
+        deadline_str = input("Дедлайн (ДД-ММ-ГГГГ): ")
+        try:
+            deadline_obj = datetime.strptime(deadline_str, "%d-%m-%Y")
+            deadline_normalized = deadline_obj.strftime("%Y-%m-%d")
+            break
+        except ValueError:
+            print("Ошибка: неверный формат даты! Используйте ДД-ММ-ГГГГ\n")
+    
+    #Цикл для приоритета
+    while True:
+        priority = input("Приоритет (высокий/средний/низкий): ").lower()
+        if priority in ("высокий", "средний", "низкий"):
+            break
+        print("Ошибка: приоритет должен быть высокий/средний/низкий\n")
+  
+    
+    #Загружаем существующие задачи
+    tasks = load_tasks()
+    
+    #Генерируем новый ID
+    if tasks:
+        new_id = max(t.get("id", 0) for t in tasks) + 1
+    else:
+        new_id = 1
+    
+    task = {
+        "id": new_id,
+        "title": title,
+        "description": description,
+        "deadline": deadline_normalized,
+        "priority": priority,
+        "status": "не выполнена"
+    }
+    
+    tasks.append(task)
+    save_tasks(tasks)
+    
+    print(f"✅ Задача \"{title}\" добавлена! ID: {new_id}")
+    return task
+
+def add_task():
+    #Главная функция меню - вызов нескольких задач
+    print("\n" + "=" * 40)
+    print("ДОБАВЛЕНИЕ ЗАДАЧ")
+    print("=" * 40)
+    
+    added_count = 0
+    
+    while True:
+        add_one_task()
+        added_count += 1
+        
+        print("\n" + "-" * 30)
+        answer = input("Добавить ещё одну задачу? (да/нет): ").lower()
+        if answer not in ("да", "д", "yes", "y"):
+            break
+    
+    print(f"\n✨ Всего добавлено задач: {added_count}")
+
+# Если запускать файл напрямую для теста
+if __name__ == "__main__":
+    add_task()
