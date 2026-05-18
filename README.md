@@ -3,8 +3,8 @@
 
 ## 👥 Команда и роли
 Участник, роль, ветка, основные написанные функции 
-Смолякова У., тимлид, main, архитектура, мерж, README
-Непорада В., разработчик, task-1,-9, task_1_zadachliiii, сохранение и добавление задач
+Смолякова У., тимлид, main и main_menu, архитектура, мерж, README
+Непорада В., разработчик, task_1_9, tasksss_adding, сохранение и добавление задач
 Степанова М., разработчик, feature/mamamamaria, task_manager.py, фильтрация, удаление задач, отметка выполненной
 Лаптева В., разработчик, task-567, hot_tasks.py, sorting.py, statistics.py, отображение горящих задач, сортировка, статистика
 
@@ -26,6 +26,6 @@ Tasl_planner/
 ├── requirements.txt    # зависимости (если есть)
 ├── main.py                   # точка входа
 └── modules/                # собственные модули команды
-    ├── task_1_zadachliiii.py
-    ├── module2.py
-    └── module3.py
+    ├── tasks_1_9.py
+    ├── tasks_567.py
+    └── feature/mamamamaria.py
