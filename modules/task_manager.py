@@ -1,6 +1,7 @@
 # modules/task_manager.py
 # Автор: mamamarria
 # Задачи: отметка выполненной, удаление, фильтрация, 
+from modules.Tasks_adding import save_tasks, load_tasks
 from datetime import datetime
 #  ЗАДАЧА 2: ОТМЕТКА ЗАДАЧИ ВЫПОЛНЕННОЙ 
 def complete_task(tasks, task_id):
