@@ -17,7 +17,7 @@ def get_urgent_tasks(tasks):
             
         # Преобразуем строку дедлайна в объект даты. Если формат даты неверный, задача пропускается
         try:
-            deadline_date = datetime.strptime(deadline_str, "%d-%m-%Y").date()
+            deadline_date = datetime.strptime(deadline_str, "%Y-%m-%d").date()
         except ValueError:
              continue
         
@@ -74,3 +74,141 @@ def display_urgent_tasks(tasks):
         print(f"   Дедлайн: {task['deadline']}")
         print("=" * 30)
 
+test_tasks = [
+    # 1. Горящая задача (сегодня)
+    {
+        "id": 1,
+        "title": "Сдать годовой отчет",
+        "status": "в работе",
+        "deadline": datetime.now().strftime("%Y-%m-%d"),  # Сегодня
+        "priority": "высокий"
+    },
+    
+    # 2. Горящая задача (завтра)
+    {
+        "id": 2,
+        "title": "Встреча с инвесторами",
+        "status": "в работе",
+        "deadline": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"),
+        "priority": "критический"
+    },
+    
+    # 3. Горящая задача (послезавтра)
+    {
+        "id": 3,
+        "title": "Подготовить презентацию",
+        "status": "в работе",
+        "deadline": (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d"),
+        "priority": "средний"
+    },
+    
+    # 4. Просроченная задача (должна попасть в горящие)
+    {
+        "id": 4,
+        "title": "Отправить договор клиенту",
+        "status": "в работе",
+        "deadline": (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d"),
+        "priority": "высокий"
+    },
+    
+    # 5. Сильно просроченная задача (тоже попадет)
+    {
+        "id": 5,
+        "title": "Обновить документацию",
+        "status": "в работе",
+        "deadline": (datetime.now() - timedelta(days=10)).strftime("%Y-%m-%d"),
+        "priority": "низкий"
+    },
+    
+    # 6. Выполненная задача (должна быть пропущена)
+    {
+        "id": 6,
+        "title": "Провести код-ревью",
+        "status": "выполнена",
+        "deadline": (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d"),
+        "priority": "средний"
+    },
+    
+    # 7. Негорящая задача (больше 2 дней)
+    {
+        "id": 7,
+        "title": "Спланировать следующий спринт",
+        "status": "в работе",
+        "deadline": (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d"),
+        "priority": "средний"
+    },
+    
+    # 8. Негорящая задача (очень далекая)
+    {
+        "id": 8,
+        "title": "Изучить новый фреймворк",
+        "status": "в работе",
+        "deadline": (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d"),
+        "priority": "низкий"
+    },
+    
+    # 9. Задача без дедлайна (должна быть пропущена)
+    {
+        "id": 9,
+        "title": "Позвонить заказчику",
+        "status": "в работе",
+        "deadline": None,
+        "priority": "высокий"
+    },
+    
+    # 10. Задача с некорректным форматом даты (должна быть пропущена)
+    {
+        "id": 10,
+        "title": "Отправить отчет",
+        "status": "в работе",
+        "deadline": "20.05.2026",  # Неправильный формат
+        "priority": "средний"
+    },
+    
+    # 11. Задача без поля deadline (должна быть пропущена)
+    {
+        "id": 11,
+        "title": "Купить подарок коллеге",
+        "status": "в работе",
+        "priority": "низкий"
+    },
+    
+    # 12. Задача без ID (вызовет ошибку в display_urgent_tasks)
+    {
+        "title": "Нет ID у задачи",
+        "status": "в работе",
+        "deadline": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"),
+        "priority": "средний"
+    },
+    
+    # 13. Пустая строка в статусе (должна обработаться)
+    {
+        "id": 13,
+        "title": "Статус не указан",
+        "status": "",
+        "deadline": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"),
+        "priority": "средний"
+    },
+    
+    # 14. Задача с разными вариантами статуса "выполнена"
+    {
+        "id": 14,
+        "title": "Уже сделано (выполнено)",
+        "status": "выполнено",  # Другой вариант
+        "deadline": (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d"),
+        "priority": "высокий"
+    },
+    
+    # 15. Крайний случай: дедлайн ровно через 2 дня и 1 секунду
+    {
+        "id": 15,
+        "title": "Пограничный случай",
+        "status": "в работе",
+        "deadline": (datetime.now() + timedelta(days=2, hours=1)).strftime("%Y-%m-%d"),
+        "priority": "средний"
+    }
+]
+if __name__ == "__main__":
+    print("📅 Текущая дата:", datetime.now().date())
+    print("=" * 50)
+    display_urgent_tasks(test_tasks)
