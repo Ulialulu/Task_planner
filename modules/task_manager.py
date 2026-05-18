@@ -49,8 +49,9 @@ def show_tasks(tasks, title="СПИСОК ЗАДАЧ"):
 
     for task in tasks:
         print(f"ID: {task['id']} | {task['title']} | до: {task['deadline']} | {task['priority']} | {task['status']}")
-
-
+        if task.get('description'):
+            print(f'Описание: {task['description']}')
+        print("-" * 70)
 # ТЕСТИРОВАНИЕ
 if __name__ == "__main__":
     print("=== ТЕСТИРОВАНИЕ МОДУЛЯ ===\n")
